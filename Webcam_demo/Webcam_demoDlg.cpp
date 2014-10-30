@@ -469,7 +469,6 @@ void CWebcam_demoDlg::OnTimer(UINT_PTR nIDEvent)
 		
 	
 		if(dwSize>0){
-			BYTE *pImage;
 			BYTE *p32Image;
 
 			frameWidth  = this->m_pVMRCap->GetWidth();
