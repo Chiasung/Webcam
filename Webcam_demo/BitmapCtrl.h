@@ -148,7 +148,7 @@ public:
 	void InitBitmap32(int row,int col);
 	void SetBitmap32(int row,int col,const unsigned __int32 *img);
 	void Set_In_Simulation(bool b_In_Simulation);
-	void ConvertToGreyScale();
+	void AdaptiveThreshold();
 	void SumIntegralImage(unsigned int* pIntegral);
 
 	virtual ~CBitmapCtrl();

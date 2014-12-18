@@ -550,7 +550,7 @@ void CBitmapCtrl::SetBitmap32(int row, int col, const unsigned __int32 *img)
 
 		//=============================
 		if(m_bBilevel && !m_bGreyScale){
-			ConvertToGreyScale();  //CSL
+			AdaptiveThreshold();  //CSL
 		}else	if(!m_bBilevel && m_bGreyScale  ){
 				for(int i=0; i< m_width*m_height; i++){
 					buf[i].red		= buf[i].grey;
@@ -925,7 +925,7 @@ BOOL CBitmapCtrl::GetBitmap8(unsigned char **img)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-void CBitmapCtrl::ConvertToGreyScale()
+void CBitmapCtrl::AdaptiveThreshold()
 {
 	int totalPixels;
 
@@ -935,8 +935,8 @@ void CBitmapCtrl::ConvertToGreyScale()
 		unsigned int sum;
 		FillMemory(pIntegral, m_height * m_width, 0);
 		BYTE mean, byte;
-		static const BYTE C=2;		// it is better 1 in some cases
-		static const int RECT=5;	// TODO dynamically adapt value from 3 to 8 based on image size
+		static const BYTE C=1;		// it is better 1 in some cases
+		static const int RECT=3;	// TODO dynamically adapt value from 3 to 8 based on image size
 		static const unsigned int count = (RECT*2+1)*(RECT*2+1);
 		//-------------------
 		//Bin m_strongestLine;
@@ -948,9 +948,9 @@ void CBitmapCtrl::ConvertToGreyScale()
 		//-------------------
 		// fill integral image. First step is to copy orig.image -> integral image
 		for (x=totalPixels-1; x>=0; x--){
-			pIntegral[x] = (((buf[x].red     * 77)   + 
-									   (buf[x].green * 150) + 
-								       (buf[x].blue   * 28)) >> 8) & 255;		// 100% Intesity = 30% Red + 59% Green + 11% Blue
+			pIntegral[x] = (((buf[x].red   * 77)   + 
+							 (buf[x].green * 150) + 
+							 (buf[x].blue  * 28)) >> 8) & 255;		// 100% Intesity = 30% Red + 59% Green + 11% Blue
 		}	
 		SumIntegralImage(pIntegral);
 	
@@ -983,7 +983,7 @@ void CBitmapCtrl::ConvertToGreyScale()
 				}else{
 					buf[yOffset +x].red		= 255;
 					buf[yOffset +x].green	= 255;
-					buf[yOffset +x].blue		= 255;
+					buf[yOffset +x].blue	= 255;
 				}	
 			}	
 		}	
